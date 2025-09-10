@@ -6,7 +6,7 @@ Setelah persiapan awal selesai, langkah berikutnya adalah membuat aplikasi baru 
 
 Langkah berikutnya adalah menambahkan template dasar untuk menampilkan data. Di dalam direktori main, buat folder baru bernama templates, lalu buat file main.html. Isi file tersebut dengan struktur HTML sederhana, misalnya menampilkan informasi NPM, nama, dan kelas. Pada tahap ini, file HTML belum dihubungkan dengan Django, sehingga kamu bisa langsung membukanya di browser hanya untuk memeriksa tampilan dasarnya.
 
-Setelah itu, masuk ke tahap menghubungkan view dengan template. Pada file views.py di aplikasi main, impor fungsi render dari django.shortcuts lalu buat fungsi show_main yang menerima parameter request. Di dalam fungsi ini, buat dictionary bernama context yang berisi data, misalnya NPM, nama, dan kelas, kemudian kembalikan fungsi render(request, "main.html", context) agar data tersebut dapat ditampilkan di main.html. Supaya template bisa menampilkan data secara dinamis, ubah isi main.html dengan menggunakan variabel template Django, yaitu {{ npm }}, {{ name }}, dan {{ class }}.
+Setelah itu, masuk ke tahap menghubungkan view dengan template. Pada file views.py di aplikasi main, impor fungsi render dari django.shortcuts lalu buat fungsi show_main yang menerima parameter request. Di dalam fungsi ini, buat dictionary bernama context yang berisi data, misalnya NPM, nama, dan kelas, kemudian kembalikan fungsi render(request, "main.html", context) agar data tersebut dapat ditampilkan di main.html. Supaya template bisa menampilkan data secara dinamis, ubah isi main.html dengan menggunakan variabel template Django, yaitu {{ applicationname }}, {{ name }}, dan {{ class }}.
 
 Langkah berikutnya adalah mengatur routing URL. Pertama, buat file urls.py di dalam direktori aplikasi main. Isi file tersebut dengan konfigurasi routing menggunakan urlpatterns, dan arahkan route '' (root) ke fungsi show_main. Setelah itu, buka file urls.py di level proyek (football-shop), impor fungsi include, lalu tambahkan route path('', include('main.urls')) agar proyek utama bisa mengarahkan request ke routing aplikasi main.
 
@@ -18,6 +18,8 @@ Selain itu, saya juga menambahkan method dan properti tambahan agar model lebih 
 
 Dengan struktur model ini, data produk dapat disimpan dengan lebih rapi, serta memiliki logika bisnis sederhana langsung di dalam model. Setelah model selesai dibuat, langkah selanjutnya adalah menjalankan perintah python manage.py makemigrations dan python manage.py migrate untuk membuat dan menerapkan skema tabel Product ke dalam basis data.
 
+Setelah aplikasi selesai dibuat secara lokal, langkah selanjutnya adalah melakukan deployment ke PWS agar aplikasi dapat diakses melalui Internet. Pertama, masuk ke halaman PWS dan login menggunakan akun SSO UI. Setelah berhasil login, buat project baru, kemudian beri nama project sesuai kebutuhan, misalnya footballshop. Selanjutnya, hubungkan project di PWS dengan repository GitHub yang sudah dibuat, lalu pilih branch yang akan digunakan, yaitu master.
+
 2. ![alt text](image.png)
 
 3. Dalam proyek Django, file settings.py berperan sebagai pusat pengaturan utama yang mengendalikan bagaimana aplikasi dapat berjalan dengan baik. Di dalamnya terdapat berbagai pengaturan penting, mulai dari konfigurasi database yang menentukan jenis basis data yang digunakan, nama basis data, hingga informasi login seperti user dan password. Selain itu, file ini juga memuat daftar aplikasi yang dipakai dalam proyek melalui INSTALLED_APPS, middleware yang berfungsi memproses request dan response, serta pengaturan template dan static files untuk menangani file HTML dan aset lainnya. Aspek keamanan seperti SECRET_KEY dan ALLOWED_HOSTS juga dikendalikan melalui file ini.
@@ -26,3 +28,4 @@ Dengan struktur model ini, data produk dapat disimpan dengan lebih rapi, serta m
 
 5. Django sering dijadikan pilihan pertama untuk belajar pengembangan perangkat lunak karena framework ini punya struktur yang rapi dan banyak fitur bawaan. Django memakai konsep MTV (Model-Template-View) yang bisa membantu pemula memahami bagaimana data, logika program, dan tampilan saling terhubung dalam sebuah aplikasi web. Selain itu, Django sudah menyediakan banyak hal penting seperti sistem login, panel admin, pengaturan database, sampai manajemen URL, sehingga kita bisa langsung fokus ke logika aplikasi tanpa ribet menambahkan library lain.
 
+6. Tidak ada feedback untuk asisten dosen, asisten dosen sudah membantu saya saat saya bertanya dan butuh bantuan.
