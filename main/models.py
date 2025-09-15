@@ -1,9 +1,8 @@
 import uuid
 from django.db import models
 
-class Product(models.Model):
+class Shop(models.Model):
     CATEGORY_CHOICES = [
-        ('price', 'Price'),
         ('shoes', 'Shoes'),
         ('jersey', 'Jersey'),
         ('ball', 'Ball'),
@@ -18,7 +17,7 @@ class Product(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='update')
     thumbnail = models.URLField(blank=True, null=True)
     is_featured = models.BooleanField(default=False)
-    
+    created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.name
     

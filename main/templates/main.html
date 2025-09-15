@@ -1,6 +1,44 @@
-<h5>Application Name: </h5>
-<p>{{ applicationname }}</p>
-<h5>Name: </h5>
-<p>{{ name }}<p>
-<h5>Class: </h5>
+<h1>Football Shop</h1>
+
+<h5>NPM: </h5>
+<p>{{ npm }}</p>
+
+<h5>Name:</h5>
+<p>{{ name }}</p>
+
+<h5>Class:</h5>
 <p>{{ class }}</p>
+
+<a href="{% url 'main:create_shop' %}">
+  <button>+ Add Shop</button>
+</a>
+
+<hr>
+
+{% if not shop_list %}
+<p>Belum ada data berita pada football shop.</p>
+{% else %}
+
+{% for shop in shop_list %}
+<div>
+  <h2><a href="{% url 'main:show_shop' shop.id %}">{{ shop.title }}</a></h2>
+
+  <p><b>{{ shop.get_category_display }}</b>{% if shop.is_featured %} | 
+    <b>Featured</b>{% endif %}{% if shop.is_shop_hot %} | 
+    <b>Hot</b>{% endif %} | <i>{{ shop.created_at|date:"d M Y H:i" }}</i> 
+    </p>
+
+  {% if shop.thumbnail %}
+  <img src="{{ shop.thumbnail }}" alt="thumbnail" width="150" height="100">
+  <br />
+  {% endif %}
+
+  <p>{{ shop.description|truncatewords:25 }}</p>
+
+  <p><a href="{% url 'main:show_shop' shop.id %}"><button>Read More</button></a></p>
+</div>
+
+<hr>
+{% endfor %}
+
+{% endif %}

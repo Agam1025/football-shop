@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<p><a href="{% url 'main:show_main' %}"><button>← Back to shop List</button></a></p>
+
+<h1>{{ shop.title }}</h1>
+<p><b>{{ shop.get_category_display }}</b>{% if shop.is_featured %} | 
+    <b>Featured</b>{% endif %}{% if shop.is_shop_hot %} | 
+    <b>Hot</b>{% endif %} | <i>{{ shop.created_at|date:"d M Y, H:i" }}</i> 
+    | Views: {{ shop.shop_views }}</p>
+
+
+{% if shop.thumbnail %}
+<img src="{{ shop.thumbnail }}" alt="shop thumbnail" width="300">
+<br /><br />
+{% endif %}
+
+<p>{{ shop.description }}</p>
+
+{% endblock content %}
