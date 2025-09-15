@@ -34,8 +34,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "naufal-agam-footballshop.pbp.cs.ui.ac.id"]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://naufal-agam-footballshop.pbp.cs.ui.ac.id/",
-    "http://naufal-agam-footballshop.pbp.cs.ui.ac.id/"
+    "https://naufal-agam-footballshop.pbp.cs.ui.ac.id",
 ]
 
 # Application definition
