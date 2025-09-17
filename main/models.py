@@ -18,6 +18,7 @@ class Shop(models.Model):
     thumbnail = models.URLField(blank=True, null=True)
     is_featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return self.name
     
@@ -27,5 +28,10 @@ class Shop(models.Model):
     
     def is_training_gear(self):
         return self.category in ['cone', 'vest', 'headband']
+    
+    # class Emplyee(models.Model):
+    #     name : model.CharField(max_length=200)
+    #     age : models.IntegerField()
+    #     persona : models.TextField()
 
 

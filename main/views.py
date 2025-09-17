@@ -63,3 +63,11 @@ def show_json_by_id(request, news_id):
        return HttpResponse(json_data, content_type="application/json")
    except Shop.DoesNotExist:
        return HttpResponse(status=404)
+   
+# def add_employee(request):
+#     employee = Employee.objects.create(
+#         name=name,
+#         age=age,
+#         persona=persona
+#     )
+#     return HttpResponse(content = employee)
