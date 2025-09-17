@@ -35,7 +35,7 @@ Setelah aplikasi selesai dibuat secara lokal, langkah selanjutnya adalah melakuk
 
 
 <details>
-<Summary><b>Tugas 2</b></Summary>
+<Summary><b>Tugas 3</b></Summary>
 1.
 Data delivery itu sangat penting untuk menjadi “jembatan” antara pengguna dan sistem. Bayangkan, kalau kita klik tombol atau isi form, tanpa adanya mekanisme pengiriman data, permintaan itu nggak akan pernah sampai kepada server. Begitu juga sebaliknya, hasil pemrosesan dari server nggak akan bisa balik lagi ke pengguna. Jadi data delivery ini yang bikin interaksi dua arah berjalan lancar mulai dari input, proses, sampai output. Selain itu, data delivery juga menjaga biar informasi yang lewat antar bagian platform tetap konsisten dan nggak hilang di tengah jalan. Dengan adanya alur pengiriman data yang rapi, platform jadi bisa berkembang lebih jauh, mudah untuk diintegrasikan dengan layanan lain, dan tentunya membuat pengalaman pengguna jadi lebih baik.
 
@@ -58,5 +58,11 @@ Agar fungsi-fungsi tadi bisa diakses, kita menambahkan routing di urls.py. Di si
 Selain itu, dua template tambahan juga dibuat, yaitu create_shop.html untuk form input data dan shop_detail.html untuk menampilkan detail shop yang dipilih. Tidak hanya itu, aplikasi juga diperluas dengan menambahkan endpoint XML dan JSON. Beberapa fungsi views baru dibuat untuk mengembalikan data dalam format XML dan JSON, termasuk versi by ID untuk mengambil data shop tertentu. Routing di urls.py kembali diperbarui agar endpoint ini bisa diakses.
 
 Sebagai langkah akhir, semua fungsi yang sudah dibuat diuji menggunakan Postman. Server Django dijalankan, kemudian endpoint XML dan JSON diakses untuk memastikan data bisa ditampilkan dengan benar, baik untuk semua data maupun berdasarkan ID.
+
+6.
+![alt text](image-1.png)
+![alt text](image-2.png)
+![alt text](image-3.png)
+![alt text](image-4.png)
 
 </details>

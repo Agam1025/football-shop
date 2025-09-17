@@ -48,18 +48,18 @@ def show_json(request):
     json_data = serializers.serialize("json", news_list)
     return HttpResponse(json_data, content_type="application/json")
 
-def show_xml_by_id(request, news_id):
+def show_xml_by_id(request, shop_id):
    try:
-       news_item = Shop.objects.filter(pk=news_id)
-       xml_data = serializers.serialize("xml", news_item)
+       shop_item = Shop.objects.filter(pk=shop_id)
+       xml_data = serializers.serialize("xml", shop_item)
        return HttpResponse(xml_data, content_type="application/xml")
    except Shop.DoesNotExist:
        return HttpResponse(status=404)
 
-def show_json_by_id(request, news_id):
+def show_json_by_id(request, shop_id):
    try:
-       news_item = Shop.objects.get(pk=news_id)
-       json_data = serializers.serialize("json", [news_item])
+       shop_item = Shop.objects.get(pk=shop_id)
+       json_data = serializers.serialize("json", [shop_item])
        return HttpResponse(json_data, content_type="application/json")
    except Shop.DoesNotExist:
        return HttpResponse(status=404)
