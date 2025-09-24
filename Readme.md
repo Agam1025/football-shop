@@ -1,6 +1,7 @@
 <details>
 <Summary><b>Tugas 2</b></Summary>
-1. Pertama tama saya buat link repository yang bernama football-shop, setelah itu saya cloning dengan menjalankan perintah git clone (link repository). setelah terbuat suatu folder yang bernama football-shop, buka folder tersebut dan menjalankan perintah python -m venv env. setelah muncul folder env di vscode saya, saya aktifkan virtual environment itu dengan menjalankan perintah env\Scripts\activate. Fungsinya adalah untuk mengisolasi package serta dependencies dari aplikasi agar tidak bertabrakan dengan versi lain yang ada pada komputermu. Lalu saya membuat file dengan nama requirements.txt dan tambahkan beberapa dependencies yang isinya django, gunicorn, whitenoise, psycopg2-binary, requests, urllib3, python-dotenv lalu menginstall dengan perintah pip install -r requirements.txt. lalu saya bikin folder baru dengan perintah django-admin startproject football_shop . 
+1.
+Pertama tama saya buat link repository yang bernama football-shop, setelah itu saya cloning dengan menjalankan perintah git clone (link repository). setelah terbuat suatu folder yang bernama football-shop, buka folder tersebut dan menjalankan perintah python -m venv env. setelah muncul folder env di vscode saya, saya aktifkan virtual environment itu dengan menjalankan perintah env\Scripts\activate. Fungsinya adalah untuk mengisolasi package serta dependencies dari aplikasi agar tidak bertabrakan dengan versi lain yang ada pada komputermu. Lalu saya membuat file dengan nama requirements.txt dan tambahkan beberapa dependencies yang isinya django, gunicorn, whitenoise, psycopg2-binary, requests, urllib3, python-dotenv lalu menginstall dengan perintah pip install -r requirements.txt. lalu saya bikin folder baru dengan perintah django-admin startproject football_shop . 
 
 Setelah itu buat file .env di vs code lalu buka dan tambahkan konfigurasi PRODUCTION=False dan buat file .env.prod dengan isi seperti DB_NAME DB_HOST dan diisi dengan data yang sudah diberikan melalui email UI setelah itu modifikasi settings.py lalu modifikasi pada bagian ALLOWED_HOST dengan menambahkan string ["localhost", "127.0.0.1"] untuk keperluan development. Setelah itu tambahkan konfigurasi PRODUCTION tepat di atas code DEBUG di settings.py, dengan PRODUCTION = os.getenv('PRODUCTION', 'False').lower() == 'true', lalu ubah pada bagian DATABASES. Jalankan perintah python manage.py runserver, lalu buka http://localhost:8000 pada peramban web untuk melihat animasi roket sebagai tanda aplikasi Django kamu berhasil dibuat. 
 
@@ -22,15 +23,20 @@ Dengan struktur model ini, data produk dapat disimpan dengan lebih rapi, serta m
 
 Setelah aplikasi selesai dibuat secara lokal, langkah selanjutnya adalah melakukan deployment ke PWS agar aplikasi dapat diakses melalui Internet. Pertama, masuk ke halaman PWS dan login menggunakan akun SSO UI. Setelah berhasil login, buat project baru, kemudian beri nama project sesuai kebutuhan, misalnya footballshop. Selanjutnya, hubungkan project di PWS dengan repository GitHub yang sudah dibuat, lalu pilih branch yang akan digunakan, yaitu master.
 
-2. ![alt text](image.png)
+2. 
+![alt text](image.png)
 
-3. Dalam proyek Django, file settings.py berperan sebagai pusat pengaturan utama yang mengendalikan bagaimana aplikasi dapat berjalan dengan baik. Di dalamnya terdapat berbagai pengaturan penting, mulai dari konfigurasi database yang menentukan jenis basis data yang digunakan, nama basis data, hingga informasi login seperti user dan password. Selain itu, file ini juga memuat daftar aplikasi yang dipakai dalam proyek melalui INSTALLED_APPS, middleware yang berfungsi memproses request dan response, serta pengaturan template dan static files untuk menangani file HTML dan aset lainnya. Aspek keamanan seperti SECRET_KEY dan ALLOWED_HOSTS juga dikendalikan melalui file ini.
+3. 
+Dalam proyek Django, file settings.py berperan sebagai pusat pengaturan utama yang mengendalikan bagaimana aplikasi dapat berjalan dengan baik. Di dalamnya terdapat berbagai pengaturan penting, mulai dari konfigurasi database yang menentukan jenis basis data yang digunakan, nama basis data, hingga informasi login seperti user dan password. Selain itu, file ini juga memuat daftar aplikasi yang dipakai dalam proyek melalui INSTALLED_APPS, middleware yang berfungsi memproses request dan response, serta pengaturan template dan static files untuk menangani file HTML dan aset lainnya. Aspek keamanan seperti SECRET_KEY dan ALLOWED_HOSTS juga dikendalikan melalui file ini.
 
-4. Migrasi database di Django adalah proses untuk menyesuaikan struktur basis data dengan model yang sudah dibuat di aplikasi. Setiap kali kita menambahkan atau mengubah model di file models.py, Django tidak langsung mengubah database, tetapi terlebih dahulu membuat file migrasi menggunakan perintah python manage.py makemigrations. File migrasi ini berisi instruksi perubahan yang perlu dilakukan pada database. Setelah itu, perintah python manage.py migrate dijalankan untuk menerapkan instruksi tersebut sehingga database benar-benar diperbarui sesuai model terbaru.
+4. 
+Migrasi database di Django adalah proses untuk menyesuaikan struktur basis data dengan model yang sudah dibuat di aplikasi. Setiap kali kita menambahkan atau mengubah model di file models.py, Django tidak langsung mengubah database, tetapi terlebih dahulu membuat file migrasi menggunakan perintah python manage.py makemigrations. File migrasi ini berisi instruksi perubahan yang perlu dilakukan pada database. Setelah itu, perintah python manage.py migrate dijalankan untuk menerapkan instruksi tersebut sehingga database benar-benar diperbarui sesuai model terbaru.
 
-5. Django sering dijadikan pilihan pertama untuk belajar pengembangan perangkat lunak karena framework ini punya struktur yang rapi dan banyak fitur bawaan. Django memakai konsep MTV (Model-Template-View) yang bisa membantu pemula memahami bagaimana data, logika program, dan tampilan saling terhubung dalam sebuah aplikasi web. Selain itu, Django sudah menyediakan banyak hal penting seperti sistem login, panel admin, pengaturan database, sampai manajemen URL, sehingga kita bisa langsung fokus ke logika aplikasi tanpa ribet menambahkan library lain.
+5. 
+Django sering dijadikan pilihan pertama untuk belajar pengembangan perangkat lunak karena framework ini punya struktur yang rapi dan banyak fitur bawaan. Django memakai konsep MTV (Model-Template-View) yang bisa membantu pemula memahami bagaimana data, logika program, dan tampilan saling terhubung dalam sebuah aplikasi web. Selain itu, Django sudah menyediakan banyak hal penting seperti sistem login, panel admin, pengaturan database, sampai manajemen URL, sehingga kita bisa langsung fokus ke logika aplikasi tanpa ribet menambahkan library lain.
 
-6. Tidak ada feedback untuk asisten dosen, asisten dosen sudah membantu saya saat saya bertanya dan butuh bantuan.
+6. 
+Tidak ada feedback untuk asisten dosen, asisten dosen sudah membantu saya saat saya bertanya dan butuh bantuan.
 </details>
 
 
@@ -65,4 +71,56 @@ Sebagai langkah akhir, semua fungsi yang sudah dibuat diuji menggunakan Postman.
 ![alt text](image-3.png)
 ![alt text](image-4.png)
 
+</details>
+
+<details>
+<Summary><b>Tugas 4</b></Summary>
+1.
+AuthenticationForm di django adalah form bawaan yang dipakai untuk memproses login. Form ini otomatis memvalidasi username dan password yang dimasukkan user dengan data di database. Kalau cocok, user bisa login, kalau tidak, akan langsung di eksekusi dan muncul pesan error.
+
+Kelebihan AuthenticationForm adalah praktis karena sudah tersedia dari django, jadi kita nggak perlu bikin form login dari nol. Sistem keamanannya juga sudah terjamin, misalnya password dicek dalam bentuk hash, bukan teks asli. Selain itu, form ini terintegrasi langsung dengan sistem autentikasi django, sehingga lebih mudah digunakan, dan sudah ada validasi otomatis untuk menampilkan error jika data login salah.
+
+Namun, ada juga kekurangannya. Form ini kurang fleksibel kalau ingin login menggunakan field lain seperti email atau nomor HP, karena default-nya hanya mendukung username dan password. Dari sisi tampilan, AuthenticationForm masih sederhana sehingga biasanya butuh di-custom agar sesuai dengan desain aplikasi. Selain itu, form ini lebih cocok digunakan bersama user model bawaan django kalau model user sudah terlalu banyak diubah, biasanya butuh override atau bahkan bikin form kustom baru.
+
+2. 
+Autentikasi adalah proses untuk memverifikasi identitas seorang user. Tujuannya memastikan bahwa orang yang mencoba masuk benar-benar sesuai dengan data yang terdaftar, misalnya melalui username dan password. Dengan autentikasi, sistem dapat mengenali siapa yang sedang mengakses aplikasi.
+
+Otorisasi adalah proses untuk menentukan apa saja yang boleh dilakukan oleh pengguna setelah berhasil diautentikasi. Tujuannya adalah memberikan pembatasan akses sesuai dengan peran atau izin yang dimiliki pengguna. Dengan otorisasi, sistem dapat mengontrol hak apa saja yang dimiliki setiap pengguna di dalam aplikasi.
+
+Autentikasi
+1. User buka halaman login
+2. User isi username & password
+3. Server cek database User :
+   - Kalau data cocok : user dianggap valid
+   - Kalau tidak cocok : akses ditolak
+4. Server buat session
+
+Otorisasi
+1. User sudah login (authenticated)
+2. User minta akses halaman tertentu
+3. Server cek role/permission user
+   - Kalau user punya izin : akses diberikan
+   - Kalau tidak punya izin : akses ditolak (403 Forbidden)
+4. Halaman/aksi ditampilkan sesuai hak akses user
+
+3.
+Cookies adalah data kecil yang disimpan pada browser user untuk menyimpan informasi tertentu, misalnya preferensi tampilan, login otomatis, atau keranjang belanja sederhana. Kelebihan cookies yaitu tidak membebani server karena penyimpanan dilakukan di sisi client, mudah diakses langsung oleh JavaScript, dan bisa bertahan dalam jangka waktu lama. Namun, cookies memiliki keterbatasan seperti ukuran yang kecil, rentan dicuri melalui serangan seperti CSRF/XSS jika tidak diamankan, serta tidak cocok untuk menyimpan data sensitif tanpa enkripsi.
+
+Session adalah mekanisme penyimpanan data yang dilakukan di sisi server, dengan browser hanya menyimpan session ID dalam bentuk cookie. Kelebihan session yaitu lebih aman karena data tidak langsung berada di sisi user, bisa menampung informasi lebih besar, dan sulit dimanipulasi oleh pengguna. Kekurangannya adalah menambah beban server karena harus menyimpan data untuk banyak user, masih bergantung pada cookie untuk menyimpan session ID, serta data bisa hilang saat session berakhir akibat timeout atau logout.
+
+4.
+Cookie sebenarnya tidak bisa dibilang aman begitu saja, karena ada beberapa risiko yang perlu diwaspadai. Misalnya, cookie bisa dicuri lewat serangan CSRF, dapat disadap kalau dikirim tanpa HTTPS, atau bahkan dimodifikasi karena memang disimpan di sisi user. Jadi, kalau dipakai untuk menyimpan data penting tanpa perlindungan tambahan, jelas berbahaya.
+Django menangani hal tersebut dengan cara :
+   - Django otomatis melindungi cookie penting seperti sessionid.
+   - Developer bisa menambahkan flag Secure agar cookie hanya dikirim lewat HTTPS.
+   - Untuk data sensitif, Django lebih menyarankan menyimpannya di session server, bukan di browser.
+
+5. 
+Pada tutorial ini saya mengimplementasikan fitur registrasi, login, dan logout. Registrasi dibuat menggunakan UserCreationForm agar pengguna baru dapat membuat akun. Fitur login diatur dengan AuthenticationForm dan fungsi authenticate serta login untuk memverifikasi identitas pengguna. Logout menggunakan fungsi logout yang menghapus sesi pengguna sekaligus cookie last_login. Selain itu, halaman utama dan detail produk saya batasi hanya dapat diakses oleh pengguna yang sudah berhasil login.
+
+Untuk pengujian aplikasi, saya membuat dua akun dummy. Masing-masing akun kemudian saya isi dengan tiga data dummy create produk. Data dummy ini membantu dalam menguji apakah setiap akun benar-benar hanya dapat melihat dan mengelola produk yang dimilikinya.
+
+Saya menghubungkan model Shop dengan model User menggunakan ForeignKey(User, on_delete=models.CASCADE). Dengan cara ini, setiap produk yang ditambahkan akan otomatis terhubung dengan user yang sedang login. Apabila user dihapus dari sistem, maka seluruh produk yang dimiliki user tersebut juga akan terhapus. Mekanisme ini memastikan data tetap konsisten dan hanya pemilik sah yang dapat mengakses artikel produknya.
+
+Pada halaman utama (main.html), saya menampilkan informasi mengenai pengguna yang sedang login, seperti username. Selain itu, saya menambahkan cookie bernama last_login yang berfungsi untuk menyimpan waktu terakhir kali pengguna berhasil login. Cookie ini akan dibuat secara otomatis ketika login berhasil, dan dihapus saat pengguna melakukan logout. Dengan begitu, pengguna bisa mengetahui kapan terakhir kali mereka mengakses aplikasi.
 </details>
