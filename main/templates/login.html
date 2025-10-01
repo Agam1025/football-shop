@@ -1,32 +1,59 @@
 {% extends 'base.html' %}
 
 {% block meta %}
-<title>Login</title>
+<title>Login - Football Shop</title>
 {% endblock meta %}
 
 {% block content %}
-<div class="login">
-  <h1>Login</h1>
+<div class="bg-[#1A1A1A] w-full min-h-screen flex items-center justify-center p-8">
+  <div class="max-w-md w-full">
+    <div class="bg-[#DD0303] rounded-lg shadow-lg border border-[#FA812F] p-6 sm:p-8">
+      <div class="text-center mb-8">
+        <h1 class="text-2xl font-extrabold text-[#FA812F] mb-2">SignIn</h1>
+        <p class="text-[#1A1A1A] font-semibold">Welcome in TheJek Shop</p>
+      </div>
 
-  <form method="POST" action="">
-    {% csrf_token %}
-    <table>
-      {{ form.as_table }}
-      <tr>
-        <td></td>
-        <td><input class="btn login_btn" type="submit" value="Login" /></td>
-      </tr>
-    </table>
-  </form>
+      <form method="POST" action="" class="space-y-6">
+        {% csrf_token %}
 
-  {% if messages %}
-  <ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %} Don't have an account yet?
-  <a href="{% url 'main:register' %}">Register Now</a>
+        <div>
+          <label for="username" class="block text-sm font-bold text-[#FA812F] mb-2">Username</label>
+          <input 
+            id="username" 
+            name="username" 
+            type="text" 
+            required 
+            class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-[#FA812F] transition-colors" 
+            placeholder="Enter your username">
+        </div>
+
+        <div>
+          <label for="password" class="block text-sm font-bold text-[#FA812F] mb-2">Password</label>
+          <input 
+            id="password" 
+            name="password" 
+            type="password" 
+            required 
+            class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-[#FA812F] transition-colors" 
+            placeholder="Enter your password">
+        </div>
+
+        <button 
+          type="submit" 
+          class="w-full bg-[#FA812F] text-[1A1A1A] font-medium py-3 px-4 rounded-md hover:bg-[#e56f20] transition-colors">
+          SignIn
+        </button>
+      </form>
+
+      <div class="mt-6 text-center pt-6 border-t border-gray-200">
+        <p class="text-[#1A1A1A] font-semibold text-sm">
+          Don't have an account? 
+          <a href="{% url 'main:register' %}" class="text-[#FA812F] hover:text-[#e56f20] font-bold">
+            Register Now
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
-
 {% endblock content %}

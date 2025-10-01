@@ -128,6 +128,24 @@ def create_shop(request):
 
     return render(request, "create_shop.html", context)
 
+def edit_shop(request, id):
+    shop = get_object_or_404(Shop, pk=id)
+    form = ShopForm(request.POST or None, instance=shop)
+    if form.is_valid() and request.method == 'POST':
+        form.save()
+        return redirect('main:show_main')
+
+    context = {
+        'form': form
+    }
+
+    return render(request, "edit_shop.html", context)
+
+def delete_shop(request, id):
+    shop = get_object_or_404(Shop, pk=id)
+    shop.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))
+
 # def add_employee(request):
 #     employee = Employee.objects.create(
 #         name=name,

@@ -1,55 +1,116 @@
-<h1>Football Shop</h1>
+{% extends 'base.html' %}
+{% load static %}
 
-<h5>NPM: </h5>
-<p>{{ npm }}</p>
+{% block meta %}
+<title>TheJek Shop</title>
+{% endblock meta %}
 
-<h5>Name:</h5>
-<p>{{ name }}</p>
+{% block content %}
+{% include 'navbar.html' %}
 
-<h5>Class:</h5>
-<p>{{ class }}</p>
+<div class="bg-[#1A1A1A] w-full pt-16 min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Header Section -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold text-[#FA812F] mb-2">TheJek Shop</h1>
+      <p class="text-gray-300 font-semibold">Keep up with the latest thejek products</p>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 bg-[#DD0303] rounded-lg border border-[#FA812F] p-4">
+      <div class="flex space-x-3 mb-4 sm:mb-0">
+        <a href="?" class="{% if request.GET.filter == 'all' or not request.GET.filter  %} bg-[#FA812F] text-[#1A1A1A]{% else %}bg-white text-gray-800 border border-gray-300{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#e56f20] hover:text-white">
+          All Product
+        </a>
+        <a href="?filter=my" class="{% if request.GET.filter == 'my' %} bg-[#FA812F] text-[#1A1A1A]{% else %}bg-white text-gray-800 border border-gray-300{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#e56f20] hover:text-white">
+          My Product
+        </a>
+      </div>
+      {% if user.is_authenticated %}
+        <div class="text-sm text-gray-200">
+          Last login: {{ last_login }}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Shop Grid -->
+    {% if not shop_list %}
+      <div class="bg-[#1A1A1A] rounded-lg border border-[#FA812F] p-12 text-center">
+        <div class="w-32 h-32 mx-auto mb-4">
+          <img src="{% static 'image/empty.png' %}" alt="No shop available" class="w-full h-full object-contain">
+        </div>
+        <h3 class="text-lg font-medium text-[#FA812F] mb-2">No product found</h3>
+        <p class="text-gray-300 mb-6">Be the first to share football product with the community.</p>
+        <a href="{% url 'main:create_shop' %}" class="inline-flex items-center px-4 py-2 bg-[#FA812F] text-[#1A1A1A] rounded-md hover:bg-[#e56f20] transition-colors">
+          Create Product
+        </a>
+      </div>
+    {% else %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for shop in shop_list %}
+          {% include 'card_shop.html' with shop=shop %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}
 
 <a href="{% url 'main:create_shop' %}">
-  <button>+ Add Shop</button>
+  <button class="bg-[#FA812F] text-[#1A1A1A] px-4 py-2 rounded-md hover:bg-[#e56f20] transition">+ Add Product</button>
 </a>
 <a href="{% url 'main:logout' %}">
-  <button>Logout</button>
+  <button class="bg-[#DD0303] text-white px-4 py-2 rounded-md hover:bg-red-700 transition">Logout</button>
 </a>
-<h5>Sesi terakhir login: {{ last_login }}</h5>
+<h5 class="text-[#FA812F]">Sesi terakhir login: {{ last_login }}</h5>
 
-<hr>
+<hr class="border-[#FA812F] my-4">
 
 <a href="?filter=all">
-    <button type="button">All Products</button>
+    <button type="button" class="bg-[#FA812F] text-[#1A1A1A] px-3 py-1 rounded-md hover:bg-[#e56f20]">All Product</button>
 </a>
 <a href="?filter=my">
-    <button type="button">My Products</button>
+    <button type="button" class="bg-[#FA812F] text-[#1A1A1A] px-3 py-1 rounded-md hover:bg-[#e56f20]">My Product</button>
 </a> 
 
 {% if not shop_list %}
-<p>Belum ada data berita pada football shop.</p>
+<p class="text-gray-300">There are no products in the football shop yet.</p>
 {% else %}
 
 {% for shop in shop_list %}
-<div>
-  <h2><a href="{% url 'main:show_shop' shop.id %}">{{ shop.title }}</a></h2>
+<div class="bg-[#1A1A1A] border border-[#FA812F] rounded-md p-4 mb-4">
+ <h2 class="text-[#FA812F] font-bold">
+   <a href="{% url 'main:show_shop' shop.id %}">{{ shop.title }}</a>
+ </h2>
 
-  <p><b>{{ shop.get_category_display }}</b>{% if shop.is_featured %} | 
-    <b>Featured</b>{% endif %}{% if shop.is_shop_hot %} | 
-    <b>Hot</b>{% endif %} | <i>{{ shop.created_at|date:"d M Y H:i" }}</i> 
-    </p>
+ <p class="text-gray-300">
+   <b>{{ shop.get_category_display }}</b>{% if shop.is_featured %} | 
+   <b>Featured</b>{% endif %}{% if shop.is_shop_hot %} | 
+   <b>Hot</b>{% endif %} | <i>{{ shop.created_at|date:"d M Y H:i" }}</i> 
+   | Views: {{ shop.shop_views }}
+ </p>
 
-  {% if shop.thumbnail %}
-  <img src="{{ shop.thumbnail }}" alt="thumbnail" width="150" height="100">
-  <br />
-  {% endif %}
+ {% if shop.thumbnail %}
+ <img src="{{ shop.thumbnail }}" alt="thumbnail" width="150" height="100" class="rounded-md border border-[#FA812F] my-2">
+ {% endif %}
 
-  <p>{{ shop.description|truncatewords:25 }}</p>
-
-  <p><a href="{% url 'main:show_shop' shop.id %}"><button>Read More</button></a></p>
+ <p class="text-gray-300">{{ shop.content|truncatewords:25 }}...</p>
+ 
+ <p class="mt-2 space-x-2">
+     <a href="{% url 'main:show_shop' shop.id %}">
+       <button class="bg-[#FA812F] text-[#1A1A1A] px-3 py-1 rounded-md hover:bg-[#e56f20]">Read More</button>
+     </a>
+     {% if user.is_authenticated and shop.user == user %}
+     <a href="{% url 'main:edit_shop' shop.pk %}">
+         <button class="bg-[#DD0303] text-white px-3 py-1 rounded-md hover:bg-red-700">Edit Product</button>
+     </a>
+     <a href="{% url 'main:delete_shop' shop.pk %}">
+      <button class="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700">Delete Product</button>
+     </a>
+     {% endif %}
+ </p>
 </div>
-
-<hr>
+<hr class="border-[#FA812F]">
 {% endfor %}
-
 {% endif %}

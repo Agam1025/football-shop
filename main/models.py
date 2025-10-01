@@ -31,6 +31,15 @@ class Shop(models.Model):
     def is_training_gear(self):
         return self.category in ['cone', 'vest', 'headband']
     
+# class Books(models.Model):
+#     id = models.UUIDField(primary_key = True, default=uuid.uuid4, editable=False)
+#     tittle = models.CharField(max_length=255)
+
+# class Author(models.Model):
+#     bio = models.TextField()
+#     book = models.ManyToManyField(Books)
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    
     # class Emplyee(models.Model):
     #     name : model.CharField(max_length=200)
     #     age : models.IntegerField()

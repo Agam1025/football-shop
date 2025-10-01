@@ -1,0 +1,84 @@
+{% load static %}
+<article class="bg-black rounded-lg border border-orange-600 hover:shadow-xl transition-transform transform hover:-translate-y-1 duration-300 overflow-hidden">
+  <!-- Thumbnail -->
+  <div class="aspect-[16/9] relative overflow-hidden">
+    {% if shop.thumbnail %}
+      <img src="{{ shop.thumbnail }}" alt="{{ shop.title }}" class="w-full h-full object-cover">
+    {% else %}
+      <div class="w-full h-full bg-gray-800 flex justify-center items-center">
+        <p class="text-white font-semibold">No Thumbnail</p>
+      </div>
+    {% endif %}
+
+    <!-- Category Badge -->
+    <div class="absolute top-3 left-3">
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-orange-500 text-white shadow">
+        {{ shop.get_category_display }}
+      </span>
+    </div>
+
+    <!-- Status Badges -->
+    <div class="absolute top-3 right-3 flex space-x-2">
+      {% if shop.is_featured %}
+        <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-yellow-400 text-black shadow">
+          Featured
+        </span>
+      {% endif %}
+      {% if shop.is_shop_hot %}
+        <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-red-600 text-white shadow">
+          Hot
+        </span>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="p-5">
+    <div class="flex items-center text-sm text-orange-200 mb-3">
+      <time datetime="{{ shop.created_at|date:'c' }}">
+        {{ shop.created_at|date:"M j, Y" }}
+      </time>
+    </div>
+
+    <h3 class="text-lg font-bold text-white mb-1 line-clamp-2 leading-tight">
+      <a href="{% url 'main:show_shop' shop.id %}" class="hover:text-orange-400 transition-colors">
+        {{ shop.title }}
+      </a>
+    </h3>
+
+    <!-- Tambahan: Nama Produk & Harga -->
+    <p class="text-orange-100 text-sm mb-1">
+      Product: <span class="font-medium text-white">{{ shop.name }}</span>
+    </p>
+    <p class="text-orange-100 text-sm mb-3">
+      Price: <span class="font-medium text-white">Rp{{ shop.price }}</span>
+    </p>
+
+    <p class="text-orange-100 text-sm leading-relaxed line-clamp-3 mb-4">
+      {{ shop.content|truncatewords:20 }}
+    </p>
+
+    <!-- Action Buttons -->
+    {% if user.is_authenticated and shop.user == user %}
+      <div class="flex items-center justify-between pt-4 border-t border-orange-700">
+        <a href="{% url 'main:show_shop' shop.id %}" class="text-orange-400 hover:text-orange-500 font-medium text-sm transition-colors">
+          Read more
+        </a>
+        <div class="flex space-x-2">
+          <a href="{% url 'main:edit_shop' shop.id %}" class="text-orange-200 hover:text-white text-sm transition-colors">
+            Edit
+          </a>
+          <a href="{% url 'main:delete_shop' shop.id %}" class="text-red-400 hover:text-red-600 text-sm transition-colors">
+            Delete
+          </a>
+        </div>
+      </div>
+    {% else %}
+      <div class="pt-4 border-t border-orange-700">
+        <a href="{% url 'main:show_shop' shop.id %}" class="text-orange-400 hover:text-orange-500 font-medium text-sm transition-colors">
+          Read more →
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</article>

@@ -1,25 +1,105 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>{{ shop.title }} - Football Shop</title>
+{% endblock meta %}
+
 {% block content %}
-<p><a href="{% url 'main:show_main' %}"><button>← Back to shop List</button></a></p>
+<div class="bg-[#1A1A1A] w-full min-h-screen">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Back Navigation -->
+        <div class="mb-6">
+            <a href="{% url 'main:show_main' %}" 
+               class="text-[#FA812F] hover:text-white font-medium transition-colors">
+                ← Back to Shop
+            </a>
+        </div>
+        
+        <!-- Article -->
+        <article class="bg-[#DD0303] border border-[#FA812F] rounded-lg overflow-hidden shadow-lg">
+            
+            <!-- Header -->
+            <div class="p-6 sm:p-8">
+                <div class="flex flex-wrap items-center gap-2 mb-4">
+                    <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-[#FA812F] text-[#1A1A1A]">
+                        {{ shop.get_category_display }}
+                    </span>
+                    {% if shop.is_featured %}
+                        <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-yellow-100 text-yellow-800">
+                            Featured
+                        </span>
+                    {% endif %}
+                    {% if shop.is_shop_hot %}
+                        <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-red-100 text-red-800">
+                            Hot
+                        </span>
+                    {% endif %}
+                </div>
+                
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-[#FA812F] leading-tight mb-4">
+                    {{ shop.title }}
+                </h1>
 
-<h1>{{ shop.title }}</h1>
-<p><b>{{ shop.get_category_display }}</b>{% if shop.is_featured %} | 
-    <b>Featured</b>{% endif %}{% if shop.is_shop_hot %} | 
-    <b>Hot</b>{% endif %} | <i>{{ shop.created_at|date:"d M Y, H:i" }}</i> 
-    | Views: {{ shop.shop_views }}</p>
+                <!-- Tambahan: Product Name, Price Description -->
+                {% if shop.product_name %}
+                    <p class="text-white text-lg mb-1">
+                        <span class="font-semibold">Product Name:</span> {{ shop.product_name }}
+                    </p>
+                {% endif %}
+                {% if shop.price %}
+                    <p class="text-white text-lg mb-1">
+                        <span class="font-semibold">Price:</span> Rp{{ shop.price }}
+                    </p>
+                {% endif %}
+                {% if shop.description %}
+                    <p class="text-orange-200 text-base mb-4">
+                        {{ shop.description }}
+                    </p>
+                {% endif %}
+                
+                <div class="flex flex-wrap items-center text-sm text-[#1A1A1A] gap-4">
+                    <time datetime="{{ shop.created_at|date:'c' }}">
+                        {{ shop.created_at|date:"M j, Y g:i A" }}
+                    </time>
+                    <span>{{ shop.shop_views }} views</span>
+                </div>
+            </div>
 
+            <!-- Featured Image -->
+            {% if shop.thumbnail %}
+                <div class="px-6 sm:px-8">
+                    <img src="{{ shop.thumbnail }}" 
+                         alt="{{ shop.title }}" 
+                         class="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-lg shadow-md">
+                </div>
+            {% endif %}
 
-{% if shop.thumbnail %}
-<img src="{{ shop.thumbnail }}" alt="shop thumbnail" width="300">
-<br /><br />
-{% endif %}
+            <!-- Content -->
+            <div class="p-6 sm:p-8">
+                <div class="prose prose-lg max-w-none">
+                    <div class="text-white leading-relaxed whitespace-pre-line text-base sm:text-lg">
+                        {{ shop.content }}
+                    </div>
+                </div>
+            </div>
 
-<p>{{ shop.description }}</p>
-
-{% if news.user %}
-    <p>Author: {{ news.user.username }}</p>
-{% else %}
-    <p>Author: Anonymous</p>
-{% endif %}
-
+            <!-- Author Info -->
+            <div class="border-t border-[#FA812F] p-6 sm:p-8 bg-[#1A1A1A]">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="font-medium text-[#FA812F]">
+                            {% if shop.user %}
+                                <p>Seller: {{ shop.user.username }}</p>
+                            {% else %}
+                                <p>Seller: Anonymous</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>
 {% endblock content %}

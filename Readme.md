@@ -124,3 +124,60 @@ Saya menghubungkan model Shop dengan model User menggunakan ForeignKey(User, on_
 
 Pada halaman utama (main.html), saya menampilkan informasi mengenai pengguna yang sedang login, seperti username. Selain itu, saya menambahkan cookie bernama last_login yang berfungsi untuk menyimpan waktu terakhir kali pengguna berhasil login. Cookie ini akan dibuat secara otomatis ketika login berhasil, dan dihapus saat pengguna melakukan logout. Dengan begitu, pengguna bisa mengetahui kapan terakhir kali mereka mengakses aplikasi.
 </details>
+
+<details>
+<Summary><b>Tugas 5</b></Summary>
+1.
+1. Inline style
+Style yang ditulis langsung di elemen HTML menggunakan atribut style. Prioritasnya paling tinggi dan menimpa semua aturan CSS lainnya, kecuali ada !important.
+2. ID selector (#id)
+Selector berdasarkan ID elemen, misal #header. Spesifisitasnya tinggi dan lebih diutamakan dibanding class atau element selector.
+3. Class, attribute, dan pseudo class selector
+Digunakan untuk menarget elemen berdasarkan class, atribut, atau keadaan tertentu. Spesifisitasnya menengah, lebih rendah dari ID tapi lebih tinggi dari element selector.
+4. Element selector dan pseudo element
+Menarget tag HTML secara langsung. Spesifisitasnya paling rendah dibanding ID atau class selector.
+5. Universal selector (*)
+Menarget semua elemen. Prioritas paling rendah, hanya berlaku jika tidak ada aturan lain yang lebih spesifik.
+6. Urutan penulisan
+Jika dua aturan memiliki spesifisitas sama, aturan yang ditulis terakhir di CSS akan diterapkan.
+7. !important
+Dapat menimpa semua aturan normal, meskipun jika ada beberapa !important, spesifisitas masih menentukan pemenangnya.
+
+2.
+Responsive design menjadi konsep penting dalam pengembangan aplikasi web karena memungkinkan tampilan dan fungsi website menyesuaikan diri secara otomatis dengan berbagai ukuran layar dan perangkat, seperti desktop, tablet, atau smartphone. Dengan responsive design, user mendapatkan pengalaman yang nyaman, navigasi mudah, dan konten tetap terbaca tanpa harus melakukan zoom atau scroll horizontal. Hal ini juga penting untuk SEO, karena mesin pencari lebih menyukai website yang mobile-friendly.
+
+Contoh aplikasi yang sudah menerapkan responsive design adalah Instagram. Baik di desktop maupun di smartphone, layout menyesuaikan ukuran layar, tombol dan gambar tetap proporsional, serta navigasi tetap mudah diakses. Sebaliknya, contoh aplikasi yang belum menerapkan responsive design misalnya beberapa website sekolah, yang tampilan desktop-nya dipaksa ditampilkan di smartphone tanpa penyesuaian. Hal ini membuat teks terlalu kecil, tombol sulit ditekan, dan user harus melakukan zoom atau scroll horizontal, sehingga pengalaman user menjadi buruk.
+
+3.
+1. Margin
+Margin adalah ruang di luar elemen yang memisahkan elemen tersebut dari elemen lain di sekitarnya. Margin tidak memiliki warna atau garis, sehingga hanya berfungsi memberikan jarak antar elemen. Dengan mengatur margin, kita bisa mengontrol seberapa jauh elemen dari elemen lain tanpa memengaruhi ukuran kontennya.
+
+Contoh: Misalkan kita memiliki sebuah div yang ingin diberi jarak dari elemen lain di sekitarnya. Kita bisa menulis CSS seperti div { margin: 20px; }, sehingga elemen tersebut memiliki jarak 20px dari semua sisi terhadap elemen lain.
+
+2. Border
+Border adalah garis di sekitar elemen yang berada di antara padding dan margin. Border bisa diberi warna, ketebalan, dan gaya. Border membuat elemen lebih terlihat jelas dan memberikan batas visual antara elemen dengan sekitarnya.
+
+Contoh: Jika kita ingin menambahkan garis biru di sekitar sebuah div, kita bisa menulis CSS seperti div { border: 2px solid blue; }. Maka elemen tersebut akan memiliki garis tepi biru setebal 2px yang membatasi konten di dalamnya.
+
+3. Padding
+Padding adalah ruang di dalam elemen, yaitu jarak antara konten elemen dengan border elemen. Padding membuat konten tidak menempel langsung ke border sehingga tampilan lebih rapi dan nyaman dibaca.
+
+Contoh: Jika sebuah div memiliki teks di dalamnya dan ingin memberi ruang antara teks dengan garis border, kita bisa menulis CSS seperti div { padding: 15px; }. Dengan begitu, teks akan berada 15px di dalam dari garis border, membuat tampilan lebih enak dilihat.
+
+4.
+Flexbox adalah metode layout CSS yang dirancang untuk mengatur elemen secara fleksibel dalam satu dimensi, baik baris maupun kolom. Dengan flexbox, kita bisa mengatur ukuran, posisi, dan jarak antar elemen secara otomatis sesuai ukuran container. Flexbox sangat berguna untuk membuat layout yang responsif, seperti menata tombol, kartu produk, atau menu navigasi, karena elemen bisa menyesuaikan diri saat ukuran layar berubah.
+
+Grid layout adalah metode layout CSS yang lebih canggih yang bekerja dalam dua dimensi, yaitu baris dan kolom sekaligus. Dengan grid, kita bisa membuat struktur kompleks seperti dashboard, galeri foto, atau halaman majalah online, karena kita bisa menentukan posisi elemen persis di grid tertentu. Grid layout sangat berguna untuk mendesain tata letak halaman yang lebih terstruktur dan rapi, terutama ketika elemen-elemen harus sejajar secara presisi di baris dan kolom.
+
+5.
+Jadi pertama, saya mulai dengan menyiapkan fungsi untuk menghapus dan mengedit product. Untuk menghapus, saya buat fungsi delete_shop yang menerima id product, lalu mencari product di database dan menghapusnya. Setelah itu, saya arahkan user kembali ke halaman daftar product. Untuk edit, saya buat fungsi edit_shop yang menampilkan form berisi data product yang sudah ada. Ketika form di-submit, data product di-update di database, lalu saya kembalikan user ke halaman daftar. Tentunya saya juga menambahkan url path untuk kedua fungsi ini di urls.py.
+
+Selanjutnya, saya memodifikasi halaman login, register, tambah product, edit product, dan detail product supaya lebih menarik. Untuk login dan register, saya letakkan form di tengah layar dengan background, dan tombol serta input yang terlihat modern. Untuk tambah dan edit product, saya buat card mirip login, lengkap dengan tombol submit dan validasi pesan sukses/gagal. Halaman detail product menampilkan gambar, nama, deskripsi, harga, serta tombol edit dan hapus.
+
+Kemudian untuk halaman daftar product, saya buat pengecekan apakah ada product tersimpan atau tidak. Kalau belum ada, saya tampilkan gambar dan pesan yang memberitahu bahwa belum ada product terdaftar. Kalau sudah ada, saya tampilkan setiap product dalam card yang responsif menggunakan grid satu kolom untuk mobile, dua kolom untuk tablet, tiga kolom untuk desktop. Setiap card menampilkan gambar product, nama, deskripsi, harga, plus tombol Edit dan Hapus. Semua desain saya buat berbeda dari tutorial supaya unik.
+
+Selanjutnya, saya buat navbar yang responsif untuk navigasi aplikasi. Navbar ini menampilkan link ke halaman daftar product, tambah product, dan logout. Saya pakai utilitas Tailwind supaya navbar bisa menyesuaikan tampilan di desktop maupun mobile. Untuk tampilan mobile, saya tambahkan tombol hamburger0 yang ketika diklik akan menampilkan link secara vertikal.
+
+Terakhir saya menjawab pertanyaan readme, dan melakukan add-commit-push ke github maupun PWS.
+
+</details>
