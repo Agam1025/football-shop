@@ -10,10 +10,11 @@
     <div class="bg-[#DD0303] rounded-lg shadow-lg border border-[#FA812F] p-6 sm:p-8">
       <div class="text-center mb-8">
         <h1 class="text-2xl font-extrabold text-[#FA812F] mb-2">SignIn</h1>
-        <p class="text-[#1A1A1A] font-semibold">Welcome in TheJek Shop</p>
+        <p class="text-[#1A1A1A] font-semibold">Welcome to TheJek Shop</p>
       </div>
 
-      <form method="POST" action="" class="space-y-6">
+      <!-- Form Login -->
+      <form id="login-form" method="POST" class="space-y-6">
         {% csrf_token %}
 
         <div>
@@ -40,11 +41,12 @@
 
         <button 
           type="submit" 
-          class="w-full bg-[#FA812F] text-[1A1A1A] font-medium py-3 px-4 rounded-md hover:bg-[#e56f20] transition-colors">
+          class="w-full bg-[#FA812F] text-[#1A1A1A] font-medium py-3 px-4 rounded-md hover:bg-[#e56f20] transition-colors">
           SignIn
         </button>
       </form>
 
+      <!-- Footer -->
       <div class="mt-6 text-center pt-6 border-t border-gray-200">
         <p class="text-[#1A1A1A] font-semibold text-sm">
           Don't have an account? 
@@ -56,4 +58,35 @@
     </div>
   </div>
 </div>
+
+<!-- Script AJAX Login -->
+<script>
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const form = e.target;
+  const formData = new FormData(form);
+
+  try {
+    const response = await fetch("{% url 'main:login' %}", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      showToast("success", data.message || "Login berhasil!");
+      setTimeout(() => {
+        window.location.href = "{% url 'main:show_main' %}";
+      }, 1000);
+    } else {
+      showToast("error", data.message || "Username atau password salah.");
+    }
+  } catch (error) {
+    console.error(error);
+    showToast("error", "Terjadi kesalahan pada server.");
+  }
+});
+</script>
 {% endblock content %}

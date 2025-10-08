@@ -181,3 +181,26 @@ Selanjutnya, saya buat navbar yang responsif untuk navigasi aplikasi. Navbar ini
 Terakhir saya menjawab pertanyaan readme, dan melakukan add-commit-push ke github maupun PWS.
 
 </details>
+
+<details>
+<Summary><b>Tugas 6</b></Summary>
+1. 
+Synchronous request adalah permintaan dari browser ke server di mana browser harus menunggu sampai server merespons sebelum bisa melakukan interaksi lain di halaman. Selama menunggu, user tidak bisa melakukan hal lain. Sebaliknya, Asynchronous request memungkinkan browser mengirim permintaan ke server dan tetap bisa digunakan untuk interaksi lain sementara menunggu respons. Ketika server merespons, JavaScript di sisi klien bisa langsung memproses data dan memperbarui bagian halaman yang diperlukan tanpa reload penuh. Contohnya adalah AJAX, yang membuat website lebih cepat dan interaktif.
+
+2.
+AJAX di Django bekerja dengan cara berikut, ketika user melakukan aksi di halaman (misalnya klik tombol atau submit form), JavaScript mengirim request AJAX ke server. Django menerima request tersebut di view, diproses (misalnya membaca atau menyimpan data), lalu mengirim respons kembali biasanya dalam format JSON. JavaScript kemudian menangkap respons ini dan memperbarui bagian tertentu dari halaman tanpa harus me-reload seluruh halaman. Dengan cara ini, interaksi menjadi lebih cepat dan halaman terasa lebih responsif.
+
+3.
+Keuntungan menggunakan AJAX dibandingkan render biasa di Django:
+- Halaman tidak perlu reload penuh, jadi lebih cepat.
+- User tetap bisa berinteraksi saat data sedang diproses.
+- Bisa mengupdate bagian tertentu dari halaman saja (partial update).
+- Mengurangi beban bandwidth, karena hanya data yang dikirim/diterima, bukan seluruh halaman.
+- Membuat website terasa lebih modern dan responsif.
+
+4.
+Untuk memastikan keamanan saat menggunakan AJAX pada fitur Login dan Register di Django, ada beberapa hal yang perlu diperhatikan. Pertama, pastikan CSRF token dikirim bersama request POST agar Django dapat memvalidasinya. Kedua, semua validasi harus dilakukan di server, jangan hanya mengandalkan JavaScript di sisi klien. Ketiga, password harus di-hash sebelum disimpan menggunakan metode Django. Keempat, gunakan HTTPS agar data sensitif tidak mudah disadap. Terakhir, sebaiknya terapkan rate limiting atau proteksi terhadap percobaan login berulang untuk mencegah serangan brute-force. Dengan langkah-langkah ini, fitur AJAX tetap aman dan data user terlindungi.
+
+5.
+Penggunaan AJAX sangat memengaruhi pengalaman user karena membuat website terasa lebih cepat dan responsif. Dengan AJAX, halaman tidak perlu reload penuh setiap kali ada interaksi, sehingga user bisa tetap beraktivitas tanpa gangguan. Selain itu, AJAX memungkinkan menampilkan feedback instan, seperti notifikasi atau update data secara langsung, yang membuat interaksi lebih lancar dan nyaman. Secara keseluruhan, AJAX meningkatkan user experience karena interaksi menjadi lebih cepat, interaktif, dan modern dibandingkan metode render biasa.
+</details>

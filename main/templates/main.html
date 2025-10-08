@@ -6,6 +6,7 @@
 {% endblock meta %}
 
 {% block content %}
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.5/dist/purify.min.js"></script>
 {% include 'navbar.html' %}
 
 <div class="bg-[#1A1A1A] w-full pt-16 min-h-screen">
@@ -14,16 +15,27 @@
     <!-- Header Section -->
     <div class="mb-8">
       <h1 class="text-3xl font-extrabold text-[#FA812F] mb-2">TheJek Shop</h1>
-      <p class="text-gray-300 font-semibold">Keep up with the latest thejek products</p>
+      <p class="text-gray-300 font-semibold">Keep up with the latest TheJek products</p>
     </div>
+
+    <!-- Button to open modal -->
+    <button onclick="showModal()" class="inline-flex items-center px-4 py-2 bg-white text-green-600 font-semibold outline outline-2 outline-green-600 outline-offset-[-2px] rounded-md hover:bg-green-600 hover:text-white transition-colors mb-4">
+      Create Product by AJAX
+    </button>
+
+    <button onclick="fetchShopFromServer()" 
+        class="inline-flex items-center px-4 py-2 bg-[#FA812F] text-[#1A1A1A] font-semibold rounded-md hover:bg-[#e56f20] transition-colors ml-2">
+  Refresh Product
+</button>
+
 
     <!-- Filter Section -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 bg-[#DD0303] rounded-lg border border-[#FA812F] p-4">
       <div class="flex space-x-3 mb-4 sm:mb-0">
-        <a href="?" class="{% if request.GET.filter == 'all' or not request.GET.filter  %} bg-[#FA812F] text-[#1A1A1A]{% else %}bg-white text-gray-800 border border-gray-300{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#e56f20] hover:text-white">
+        <a id="filter-all" class="bg-[#FA812F] text-[#1A1A1A] px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#e56f20] hover:text-white">
           All Product
         </a>
-        <a href="?filter=my" class="{% if request.GET.filter == 'my' %} bg-[#FA812F] text-[#1A1A1A]{% else %}bg-white text-gray-800 border border-gray-300{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#e56f20] hover:text-white">
+        <a id="filter-my" class="bg-white text-gray-800 border border-gray-300 px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#e56f20] hover:text-white">
           My Product
         </a>
       </div>
@@ -34,83 +46,168 @@
       {% endif %}
     </div>
 
-    <!-- Shop Grid -->
-    {% if not shop_list %}
-      <div class="bg-[#1A1A1A] rounded-lg border border-[#FA812F] p-12 text-center">
-        <div class="w-32 h-32 mx-auto mb-4">
-          <img src="{% static 'image/empty.png' %}" alt="No shop available" class="w-full h-full object-contain">
-        </div>
-        <h3 class="text-lg font-medium text-[#FA812F] mb-2">No product found</h3>
-        <p class="text-gray-300 mb-6">Be the first to share football product with the community.</p>
-        <a href="{% url 'main:create_shop' %}" class="inline-flex items-center px-4 py-2 bg-[#FA812F] text-[#1A1A1A] rounded-md hover:bg-[#e56f20] transition-colors">
-          Create Product
-        </a>
+    <!-- Loading State -->
+    <div id="loading" class="bg-[#1A1A1A] rounded-lg border border-[#FA812F] p-12 text-center hidden">
+      <svg class="animate-spin h-8 w-8 text-[#FA812F] inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+      </svg>
+      <p class="text-gray-300 mt-3">Loading products...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="error" class="hidden"></div>
+
+    <!-- Product Grid -->
+    <div id="grid" class="hidden"></div>
+
+    <!-- Empty State -->
+    <div id="empty" class="bg-[#1A1A1A] rounded-lg border border-[#FA812F] p-12 text-center hidden">
+      <div class="w-32 h-32 mx-auto mb-4">
+        <img src="{% static 'image/empty.png' %}" alt="No product available" class="w-full h-full object-contain">
       </div>
-    {% else %}
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for shop in shop_list %}
-          {% include 'card_shop.html' with shop=shop %}
-        {% endfor %}
-      </div>
-    {% endif %}
+      <h3 class="text-lg font-medium text-[#FA812F] mb-2">No product found</h3>
+      <p class="text-gray-300 mb-6">Be the first to share TheJek products with the community.</p>
+      <a href="{% url 'main:create_shop' %}" class="inline-flex items-center px-4 py-2 bg-[#FA812F] text-[#1A1A1A] rounded-md hover:bg-[#e56f20] transition-colors">
+        Create Product
+      </a>
+    </div>
+
   </div>
 </div>
+
+<!-- ===================== JAVASCRIPT SECTION ===================== -->
+<script>
+const SHOP_API_ENDPOINT = "{% url 'main:show_json' %}";
+const CURRENT_USER_ID = "{{ user.id|default_if_none:'' }}";
+
+const loadingSpinner = document.getElementById('loading');
+const errorMessage = document.getElementById('error');
+const emptyStateDisplay = document.getElementById('empty');
+const shopGridContainer = document.getElementById('grid');
+const showAllShopButton = document.getElementById('filter-all');
+const showMyShopButton = document.getElementById('filter-my');
+
+let activeFilter = 'all';
+let allShopData = [];
+
+// 🔸 Ganti tampilan tombol filter
+function updateFilterButtonsAppearance() {
+  if (activeFilter === 'all') {
+    showAllShopButton.className = 'bg-[#FA812F] text-[#1A1A1A] px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#e56f20] hover:text-white';
+    showMyShopButton.className = 'bg-white text-gray-800 border border-gray-300 px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#e56f20] hover:text-white';
+  } else {
+    showMyShopButton.className = 'bg-[#FA812F] text-[#1A1A1A] px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#e56f20] hover:text-white';
+    showAllShopButton.className = 'bg-white text-gray-800 border border-gray-300 px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#e56f20] hover:text-white';
+  }
+}
+
+// 🔸 Ganti tampilan loading/error/empty/grid
+function displayPageSection({ showLoading = false, showError = false, showEmpty = false, showGrid = false }) {
+  loadingSpinner.classList.toggle('hidden', !showLoading);
+  errorMessage.classList.toggle('hidden', !showError);
+  emptyStateDisplay.classList.toggle('hidden', !showEmpty);
+  shopGridContainer.classList.toggle('hidden', !showGrid);
+
+  if (showGrid) {
+    shopGridContainer.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
+  }
+}
+
+// 🔸 Bikin kartu produk
+function buildShopCardElement(item) {
+  const article = document.createElement('article');
+  article.className = 'bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col h-full';
+
+  const linkEdit = `{% url 'main:edit_shop' 0 %}`.replace('0', item.id);
+  const linkDelete = `{% url 'main:delete_shop' 0 %}`.replace('0', item.id);
+
+
+  const name = DOMPurify.sanitize(item.name || 'Unnamed Product');
+  const description = DOMPurify.sanitize(item.description || 'No description');
+  const price = DOMPurify.sanitize(item.price || '0');
+  const thumbnail = DOMPurify.sanitize(item.thumbnail || '');
+  const createdAt = DOMPurify.sanitize(
+    item.created_at ? new Date(item.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A'
+  );
+
+  const isOwner = CURRENT_USER_ID && String(item.user_id) === String(CURRENT_USER_ID);
+  const editDeleteHtml = isOwner
+    ? `<div class='flex space-x-2'>
+        <a href='${linkEdit}' class='text-gray-600 hover:text-gray-700 text-sm transition-colors'>Edit</a>
+        <a href='${linkDelete}' class='text-red-600 hover:text-red-700 text-sm transition-colors' onclick='return confirm("Are you sure you want to delete this product?")'>Delete</a>
+      </div>`
+    : '';
+
+  const thumbnailHtml = thumbnail
+    ? `<img src='${thumbnail}' alt='${name}' class='w-full h-48 object-cover'>`
+    : `<div class='w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500'>No Image</div>`;
+
+  const cardHtml = `
+    ${thumbnailHtml}
+    <div class="p-5 flex flex-col flex-1">
+      <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">${name}</h3>
+      <p class="text-gray-600 text-sm mb-2">${description}</p>
+      <p class="text-green-700 font-semibold mb-4">Rp${price}</p>
+      <div class="text-sm text-gray-500 mb-3">Added: ${createdAt}</div>
+      <div class="pt-3 border-t border-gray-100 flex items-center justify-between">
+        ${editDeleteHtml}
+      </div>
+    </div>
+  `;
+  article.innerHTML = cardHtml;
+  return article;
+}
+
+// 🔸 Render semua produk
+function renderAllShopCards(shopItems) {
+  shopGridContainer.innerHTML = '';
+  shopItems.forEach(item => {
+    shopGridContainer.appendChild(buildShopCardElement(item));
+  });
+}
+
+// 🔸 Filter produk
+function filterAndDisplayShop() {
+  updateFilterButtonsAppearance();
+  const filtered = activeFilter === 'all'
+    ? allShopData
+    : allShopData.filter(s => String(s.user_id) === String(CURRENT_USER_ID));
+
+  if (filtered.length === 0) {
+    displayPageSection({ showEmpty: true });
+  } else {
+    renderAllShopCards(filtered);
+    displayPageSection({ showGrid: true });
+  }
+}
+
+// 🔸 Ambil data dari server
+async function fetchShopFromServer() {
+  try {
+    displayPageSection({ showLoading: true });
+    const response = await fetch(SHOP_API_ENDPOINT, { headers: { 'Accept': 'application/json' } });
+    if (!response.ok) throw new Error('Failed to fetch products');
+
+    const data = await response.json();
+    allShopData = Array.isArray(data) ? data : [];
+    filterAndDisplayShop();
+  } catch (err) {
+    console.error('Error loading shop:', err);
+    displayPageSection({ showError: true });
+    errorMessage.innerHTML = `<p class="text-red-500 text-center">Failed to load products.</p>`;
+  }
+}
+
+// 🔸 Event filter
+showAllShopButton.addEventListener('click', () => { activeFilter = 'all'; filterAndDisplayShop(); });
+showMyShopButton.addEventListener('click', () => { activeFilter = 'my'; filterAndDisplayShop(); });
+
+// 🔸 Inisialisasi halaman
+document.addEventListener('DOMContentLoaded', fetchShopFromServer);
+
+// 🔸 Refresh otomatis setelah nambah produk
+document.addEventListener('shopAdded', fetchShopFromServer);
+</script>
+
 {% endblock content %}
-
-<a href="{% url 'main:create_shop' %}">
-  <button class="bg-[#FA812F] text-[#1A1A1A] px-4 py-2 rounded-md hover:bg-[#e56f20] transition">+ Add Product</button>
-</a>
-<a href="{% url 'main:logout' %}">
-  <button class="bg-[#DD0303] text-white px-4 py-2 rounded-md hover:bg-red-700 transition">Logout</button>
-</a>
-<h5 class="text-[#FA812F]">Sesi terakhir login: {{ last_login }}</h5>
-
-<hr class="border-[#FA812F] my-4">
-
-<a href="?filter=all">
-    <button type="button" class="bg-[#FA812F] text-[#1A1A1A] px-3 py-1 rounded-md hover:bg-[#e56f20]">All Product</button>
-</a>
-<a href="?filter=my">
-    <button type="button" class="bg-[#FA812F] text-[#1A1A1A] px-3 py-1 rounded-md hover:bg-[#e56f20]">My Product</button>
-</a> 
-
-{% if not shop_list %}
-<p class="text-gray-300">There are no products in the football shop yet.</p>
-{% else %}
-
-{% for shop in shop_list %}
-<div class="bg-[#1A1A1A] border border-[#FA812F] rounded-md p-4 mb-4">
- <h2 class="text-[#FA812F] font-bold">
-   <a href="{% url 'main:show_shop' shop.id %}">{{ shop.title }}</a>
- </h2>
-
- <p class="text-gray-300">
-   <b>{{ shop.get_category_display }}</b>{% if shop.is_featured %} | 
-   <b>Featured</b>{% endif %}{% if shop.is_shop_hot %} | 
-   <b>Hot</b>{% endif %} | <i>{{ shop.created_at|date:"d M Y H:i" }}</i> 
-   | Views: {{ shop.shop_views }}
- </p>
-
- {% if shop.thumbnail %}
- <img src="{{ shop.thumbnail }}" alt="thumbnail" width="150" height="100" class="rounded-md border border-[#FA812F] my-2">
- {% endif %}
-
- <p class="text-gray-300">{{ shop.content|truncatewords:25 }}...</p>
- 
- <p class="mt-2 space-x-2">
-     <a href="{% url 'main:show_shop' shop.id %}">
-       <button class="bg-[#FA812F] text-[#1A1A1A] px-3 py-1 rounded-md hover:bg-[#e56f20]">Read More</button>
-     </a>
-     {% if user.is_authenticated and shop.user == user %}
-     <a href="{% url 'main:edit_shop' shop.pk %}">
-         <button class="bg-[#DD0303] text-white px-3 py-1 rounded-md hover:bg-red-700">Edit Product</button>
-     </a>
-     <a href="{% url 'main:delete_shop' shop.pk %}">
-      <button class="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700">Delete Product</button>
-     </a>
-     {% endif %}
- </p>
-</div>
-<hr class="border-[#FA812F]">
-{% endfor %}
-{% endif %}
